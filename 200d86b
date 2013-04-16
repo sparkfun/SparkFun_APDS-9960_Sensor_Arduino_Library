@@ -1,0 +1,68 @@
+[1mdiff --cc LICENSE.md[m
+[1mindex 4c735d5,72c317d..0000000[m
+[1m--- a/LICENSE.md[m
+[1m+++ b/LICENSE.md[m
+[36m@@@ -1,7 -1,2 +1,12 @@@[m
+[32m++<<<<<<< HEAD[m
+[32m +License Information[m
+[32m +-------------------[m
+[32m +[m
+[32m +The hardware is released under [Creative Commons Share-alike 3.0](http://creativecommons.org/licenses/by-sa/3.0/). [m
+[32m +All other code is open source so please feel free to do anything you want with it; you buy me a beer if you use this and we meet someday ([Beerware license](http://en.wikipedia.org/wiki/Beerware)).[m
+[32m +[m
+[32m +*Additional Licenses and attributions to original authors as needed.[m
+[32m++=======[m
+[32m+ Look I'm a license[m
+[32m+ --------------------[m
+[32m++>>>>>>> a2827963f729f87fd37efce8283ebdee50e71981[m
+[1mdiff --cc README.md[m
+[1mindex 200d86b,68f7142..0000000[m
+[1m--- a/README.md[m
+[1m+++ b/README.md[m
+[36m@@@ -1,38 -1,4 +1,45 @@@[m
+[32m++<<<<<<< HEAD[m
+[32m +Part Name - IMA Part-123 Not a Part345 Breakout[m
+[32m +========================================[m
+[32m +[m
+[32m +[![Part Name](URL for picture of part  [m
+[32m +*Part Name (SKU)*](URL for product on Sparkfun.com)[m
+[32m +[m
+[32m +Basic description of the part [The datasheet can be found here.](http://dlnmh9ip6v2uc.cloudfront.net/datasheets/Sensors/IMU/PS-MPU-9150A.pdf)[m
+[32m +More information can be found on the Wiki for this repo. [m
+[32m +This part was created in Eagle vXXX, this firmware was created in Arduino vBlahBlahBlah, etc. [m
+[32m +[m
+[32m +Repository Contents[m
+[32m +-------------------[m
+[32m +[m
+[32m +* **/Enclosure** - 3D model of an enclosure designed for this particular part[m
+[32m +* **/Firmware** - Any firmware that the part ships with, [m
+[32m +* **/Fritzing** - Fritzing Example wiring images[m
+[32m +* **/Hardware** - All Eagle design files (.brd, .sch, .STL)[m
+[32m +* **/Libraries** - All Arduino libraries and board examples[m
+[32m +* **/Production - Test bed files and production panel files[m
+[32m +* **/Software** - Any desktop based software used to work with this project.[m
+[32m +[m
+[32m +Product Versions[m
+[32m +----------------[m
+[32m +[Part SKU](part URL)- Basic part and short description here[m
+[32m +[Retail part SKU] (retail URL)- Retail packaging of standard description here[m
+[32m +[Any other parts this repo covers](any other URLs) - Description of said parts[m
+[32m +[m
+[32m +Version History[m
+[32m +---------------[m
+[32m +* [vXXXXXX](URL for tag specific to this version) description [m
+[32m +* [vYYYYYY](URL for tag specific to this version) description[m
+[32m +[m
+[32m +License Information[m
+[32m +-------------------[m
+[32m +The hardware is released under [Creative Commons Share-alike 3.0](http://creativecommons.org/licenses/by-sa/3.0/).  [m
+[32m +All other code is open source so please feel free to do anything you want with it; you buy me a beer if you use this and we meet someday ([Beerware license](http://en.wikipedia.org/wiki/Beerware)).[m
+[32m +[m
+[31m- _ Any collaboration credit should appear here._[m
+[32m++_ Any collaboration credit should appear here._[m
+[32m++=======[m
+[32m+ IMA_Part-123_Not_A_Part345_Breakout[m
+[32m+ ===================================[m
+[32m+ [m
+[32m+ Example repo[m
+[32m++>>>>>>> a2827963f729f87fd37efce8283ebdee50e71981[m

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Part Name - IMA Part-123 Not a Part345 Breakout
 ========================================
 
@@ -36,3 +37,5 @@ The hardware is released under [Creative Commons Share-alike 3.0](http://creativ
 All other code is open source so please feel free to do anything you want with it; you buy me a beer if you use this and we meet someday ([Beerware license](http://en.wikipedia.org/wiki/Beerware)).
 
 _ Any collaboration credit should appear here._
+
+>>>>>>> a2827963f729f87fd37efce8283ebdee50e71981
