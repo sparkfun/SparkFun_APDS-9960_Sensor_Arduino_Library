@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 License Information
 -------------------
 
@@ -6,4 +6,4 @@ The hardware is released under [Creative Commons Share-alike 3.0](http://creativ
 All other code is open source so please feel free to do anything you want with it; you buy me a beer if you use this and we meet someday ([Beerware license](http://en.wikipedia.org/wiki/Beerware)).
 
 *Additional Licenses and attributions to original authors as needed.
->>>>>>> a2827963f729f87fd37efce8283ebdee50e71981
+

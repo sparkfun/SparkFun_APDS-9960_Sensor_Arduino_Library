@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 Part Name - IMA Part-123 Not a Part345 Breakout
 ========================================
 
@@ -38,4 +38,3 @@ All other code is open source so please feel free to do anything you want with i
 
 _ Any collaboration credit should appear here._
 
->>>>>>> a2827963f729f87fd37efce8283ebdee50e71981
