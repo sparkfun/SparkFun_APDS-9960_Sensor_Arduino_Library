@@ -31,8 +31,8 @@ Product Versions
 
 Version History
 ---------------
-* [vXXXXXX](URL for tag specific to this version) description 
-* [vYYYYYY](URL for tag specific to this version) description
+* [vExxFxxZxxHxxLxxSxx](URL for tag specific to this version) description 
+* [vEyyFyyZyyHyyLyySyy](URL for tag specific to this version) description
 
 License Information
 -------------------

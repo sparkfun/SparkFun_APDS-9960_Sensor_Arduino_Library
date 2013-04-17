@@ -1,0 +1,241 @@
+   1               		.file	"Descriptors.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__  = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+  15               	.Ltext0:
+  16               		.section	.text.CALLBACK_USB_GetDescriptor,"ax",@progbits
+  17               	.global	CALLBACK_USB_GetDescriptor
+  19               	CALLBACK_USB_GetDescriptor:
+  20               	.LFB93:
+  21               	.LSM0:
+  22               	.LVL0:
+  23               	/* prologue: function */
+  24               	/* frame size = 0 */
+  25 0000 FA01      		movw r30,r20
+  26               	.LSM1:
+  27 0002 9230      		cpi r25,lo8(2)
+  28               	.LVL1:
+  29 0004 01F0      		breq .L4
+  30               	.LVL2:
+  31 0006 9330      		cpi r25,lo8(3)
+  32 0008 01F0      		breq .L5
+  33 000a 9130      		cpi r25,lo8(1)
+  34 000c 01F4      		brne .L2
+  35 000e 80E0      		ldi r24,lo8(DeviceDescriptor)
+  36 0010 90E0      		ldi r25,hi8(DeviceDescriptor)
+  37               	.LVL3:
+  38 0012 22E1      		ldi r18,lo8(18)
+  39 0014 30E0      		ldi r19,hi8(18)
+  40               	.LVL4:
+  41 0016 00C0      		rjmp .L6
+  42               	.LVL5:
+  43               	.L4:
+  44 0018 80E0      		ldi r24,lo8(ConfigurationDescriptor)
+  45 001a 90E0      		ldi r25,hi8(ConfigurationDescriptor)
+  46               	.LVL6:
+  47 001c 2EE3      		ldi r18,lo8(62)
+  48 001e 30E0      		ldi r19,hi8(62)
+  49               	.LVL7:
+  50 0020 00C0      		rjmp .L6
+  51               	.LVL8:
+  52               	.L5:
+  53               	.LSM2:
+  54 0022 8823      		tst r24
+  55 0024 01F4      		brne .L7
+  56 0026 80E0      		ldi r24,lo8(LanguageString)
+  57 0028 90E0      		ldi r25,hi8(LanguageString)
+  58               	.LVL9:
+  59 002a 24E0      		ldi r18,lo8(4)
+  60 002c 30E0      		ldi r19,hi8(4)
+  61               	.LVL10:
+  62 002e 00C0      		rjmp .L6
+  63               	.LVL11:
+  64               	.L7:
+  65               	.LSM3:
+  66 0030 8130      		cpi r24,lo8(1)
+  67 0032 01F4      		brne .L8
+  68 0034 80E0      		ldi r24,lo8(ProductString)
+  69 0036 90E0      		ldi r25,hi8(ProductString)
+  70               	.LVL12:
+  71 0038 2EE1      		ldi r18,lo8(30)
+  72 003a 30E0      		ldi r19,hi8(30)
+  73               	.LVL13:
+  74 003c 00C0      		rjmp .L6
+  75               	.LVL14:
+  76               	.L8:
+  77               	.LSM4:
+  78 003e 8230      		cpi r24,lo8(2)
+  79 0040 01F4      		brne .L2
+  80 0042 80E0      		ldi r24,lo8(ManufNameString)
+  81 0044 90E0      		ldi r25,hi8(ManufNameString)
+  82               	.LVL15:
+  83 0046 2AE2      		ldi r18,lo8(42)
+  84 0048 30E0      		ldi r19,hi8(42)
+  85               	.LVL16:
+  86 004a 00C0      		rjmp .L6
+  87               	.LVL17:
+  88               	.L2:
+  89 004c 80E0      		ldi r24,lo8(0)
+  90 004e 90E0      		ldi r25,hi8(0)
+  91               	.LVL18:
+  92 0050 20E0      		ldi r18,lo8(0)
+  93 0052 30E0      		ldi r19,hi8(0)
+  94               	.LVL19:
+  95               	.L6:
+  96               	.LSM5:
+  97 0054 9183      		std Z+1,r25
+  98 0056 8083      		st Z,r24
+  99               	.LSM6:
+ 100 0058 C901      		movw r24,r18
+ 101               	.LVL20:
+ 102               	/* epilogue start */
+ 103 005a 0895      		ret
+ 104               	.LFE93:
+ 106               	.global	DeviceDescriptor
+ 107               		.data
+ 110               	DeviceDescriptor:
+ 111 0000 12        		.byte	18
+ 112 0001 01        		.byte	1
+ 113 0002 1001      		.word	272
+ 114 0004 02        		.byte	2
+ 115 0005 00        		.byte	0
+ 116 0006 00        		.byte	0
+ 117 0007 08        		.byte	8
+ 118 0008 4F1B      		.word	6991
+ 119 000a 0B92      		.word	-28149
+ 120 000c 0100      		.word	1
+ 121 000e 02        		.byte	2
+ 122 000f 01        		.byte	1
+ 123 0010 00        		.byte	0
+ 124 0011 01        		.byte	1
+ 125               	.global	ConfigurationDescriptor
+ 128               	ConfigurationDescriptor:
+ 129 0012 09        		.byte	9
+ 130 0013 02        		.byte	2
+ 131 0014 3E00      		.word	62
+ 132 0016 02        		.byte	2
+ 133 0017 01        		.byte	1
+ 134 0018 00        		.byte	0
+ 135 0019 80        		.byte	-128
+ 136 001a 32        		.byte	50
+ 137 001b 09        		.byte	9
+ 138 001c 04        		.byte	4
+ 139 001d 00        		.byte	0
+ 140 001e 00        		.byte	0
+ 141 001f 01        		.byte	1
+ 142 0020 02        		.byte	2
+ 143 0021 02        		.byte	2
+ 144 0022 01        		.byte	1
+ 145 0023 00        		.byte	0
+ 146 0024 05        		.byte	5
+ 147 0025 24        		.byte	36
+ 148 0026 00        		.byte	0
+ 149 0027 1001      		.word	272
+ 150 0029 04        		.byte	4
+ 151 002a 24        		.byte	36
+ 152 002b 02        		.byte	2
+ 153 002c 04        		.byte	4
+ 154 002d 05        		.byte	5
+ 155 002e 24        		.byte	36
+ 156 002f 06        		.byte	6
+ 157 0030 00        		.byte	0
+ 158 0031 01        		.byte	1
+ 159 0032 07        		.byte	7
+ 160 0033 05        		.byte	5
+ 161 0034 82        		.byte	-126
+ 162 0035 03        		.byte	3
+ 163 0036 0800      		.word	8
+ 164 0038 FF        		.byte	-1
+ 165 0039 09        		.byte	9
+ 166 003a 04        		.byte	4
+ 167 003b 01        		.byte	1
+ 168 003c 00        		.byte	0
+ 169 003d 02        		.byte	2
+ 170 003e 0A        		.byte	10
+ 171 003f 00        		.byte	0
+ 172 0040 00        		.byte	0
+ 173 0041 00        		.byte	0
+ 174 0042 07        		.byte	7
+ 175 0043 05        		.byte	5
+ 176 0044 04        		.byte	4
+ 177 0045 02        		.byte	2
+ 178 0046 1000      		.word	16
+ 179 0048 01        		.byte	1
+ 180 0049 07        		.byte	7
+ 181 004a 05        		.byte	5
+ 182 004b 83        		.byte	-125
+ 183 004c 02        		.byte	2
+ 184 004d 1000      		.word	16
+ 185 004f 01        		.byte	1
+ 186               	.global	LanguageString
+ 189               	LanguageString:
+ 190 0050 04        		.byte	4
+ 191 0051 03        		.byte	3
+ 192 0052 0904      		.word	1033
+ 193               	.global	ProductString
+ 196               	ProductString:
+ 197 0054 1E        		.byte	30
+ 198 0055 03        		.byte	3
+ 199 0056 5500      		.string	"U"
+ 200 0058 5300      		.string	"S"
+ 201 005a 4200      		.string	"B"
+ 202 005c 2000      		.string	" "
+ 203 005e 4900      		.string	"I"
+ 204 0060 4F00      		.string	"O"
+ 205 0062 2000      		.string	" "
+ 206 0064 6200      		.string	"b"
+ 207 0066 6F00      		.string	"o"
+ 208 0068 6100      		.string	"a"
+ 209 006a 7200      		.string	"r"
+ 210 006c 6400      		.string	"d"
+ 211 006e 2000      		.string	" "
+ 212 0070 2000      		.string	" "
+ 213 0072 00        		.string	""
+ 214 0073 00        		.string	""
+ 215               	.global	ManufNameString
+ 218               	ManufNameString:
+ 219 0074 2A        		.byte	42
+ 220 0075 03        		.byte	3
+ 221 0076 5300      		.string	"S"
+ 222 0078 7000      		.string	"p"
+ 223 007a 6100      		.string	"a"
+ 224 007c 7200      		.string	"r"
+ 225 007e 6B00      		.string	"k"
+ 226 0080 4600      		.string	"F"
+ 227 0082 7500      		.string	"u"
+ 228 0084 6E00      		.string	"n"
+ 229 0086 2000      		.string	" "
+ 230 0088 4500      		.string	"E"
+ 231 008a 6C00      		.string	"l"
+ 232 008c 6500      		.string	"e"
+ 233 008e 6300      		.string	"c"
+ 234 0090 7400      		.string	"t"
+ 235 0092 7200      		.string	"r"
+ 236 0094 6F00      		.string	"o"
+ 237 0096 6E00      		.string	"n"
+ 238 0098 6900      		.string	"i"
+ 239 009a 6300      		.string	"c"
+ 240 009c 7300      		.string	"s"
+ 241 009e 00        		.string	""
+ 242 009f 00        		.string	""
+ 267               	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 Descriptors.c
+C:\Users\MIKE~1.HOR\AppData\Local\Temp/ccZgPrPj.s:2      *ABS*:0000003f __SREG__
+C:\Users\MIKE~1.HOR\AppData\Local\Temp/ccZgPrPj.s:3      *ABS*:0000003e __SP_H__
+C:\Users\MIKE~1.HOR\AppData\Local\Temp/ccZgPrPj.s:4      *ABS*:0000003d __SP_L__
+C:\Users\MIKE~1.HOR\AppData\Local\Temp/ccZgPrPj.s:5      *ABS*:00000034 __CCP__
+C:\Users\MIKE~1.HOR\AppData\Local\Temp/ccZgPrPj.s:6      *ABS*:00000000 __tmp_reg__
+C:\Users\MIKE~1.HOR\AppData\Local\Temp/ccZgPrPj.s:7      *ABS*:00000001 __zero_reg__
+C:\Users\MIKE~1.HOR\AppData\Local\Temp/ccZgPrPj.s:19     .text.CALLBACK_USB_GetDescriptor:00000000 CALLBACK_USB_GetDescriptor
+C:\Users\MIKE~1.HOR\AppData\Local\Temp/ccZgPrPj.s:110    .data:00000000 DeviceDescriptor
+C:\Users\MIKE~1.HOR\AppData\Local\Temp/ccZgPrPj.s:128    .data:00000012 ConfigurationDescriptor
+C:\Users\MIKE~1.HOR\AppData\Local\Temp/ccZgPrPj.s:189    .data:00000050 LanguageString
+C:\Users\MIKE~1.HOR\AppData\Local\Temp/ccZgPrPj.s:196    .data:00000054 ProductString
+C:\Users\MIKE~1.HOR\AppData\Local\Temp/ccZgPrPj.s:218    .data:00000074 ManufNameString
+
+UNDEFINED SYMBOLS
+__do_copy_data
