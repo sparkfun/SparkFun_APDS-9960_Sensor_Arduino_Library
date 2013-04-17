@@ -1,0 +1,1 @@
+Fritizing diagram showing the OpenLog connected to an [FTDI board](https://www.sparkfun.com/products/9716)

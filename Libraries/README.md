@@ -1,0 +1,1 @@
+The libraries folder contains an Arduino library for the WS2801. The hardware folder contains the board definitions for the 32u4. 
