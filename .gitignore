@@ -1,4 +1,25 @@
 #################
+## SparkFun Useful stuff
+#################
+
+## AVR Development
+*.eep
+*.elf
+*.lst
+*.lss
+*.sym
+*.d
+*.o
+*.srec
+*.map
+
+## Notepad++ backup files
+*.bak
+
+## BOM files
+*bom*
+
+#################
 ## Eclipse
 #################
 
