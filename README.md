@@ -11,6 +11,9 @@ More information can be found on the Wiki for this repo.
 
 This part was created in Eagle vXXX, this firmware was created in Arduino vBlahBlahBlah, etc. 
 
+3d models were created in Creo
+
+
 Repository Contents
 -------------------
 
