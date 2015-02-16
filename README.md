@@ -44,4 +44,3 @@ The code is beerware; if you see me (or any other SparkFun employee) at the loca
 Distributed as-is; no warranty is given.
 
 ->Any collaboration credit should appear here.<-
-
