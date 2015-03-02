@@ -18,12 +18,13 @@ Repository Contents
 
 * **/Enclosure** - 3D model of an enclosure designed for this particular part
 * **/Firmware** - Any firmware that the part ships with, 
-* **/Fritzing** - Fritzing Example wiring images
 * **/Hardware** - All Eagle design files (.brd, .sch, .STL)
 * **/Libraries** - All Arduino libraries and board examples
 * **/Production** - Test bed files and production panel files
 * **/Software** - Any desktop based software used to work with this project.
 * **[Wiki](URL for GitHub Wiki) - Wiki with examples or helpful information for product
+
+Please note: Fritzing parts live on the [SparkFun Fritzing repo](https://github.com/sparkfun/Fritzing_Parts)
 
 Product Versions
 ----------------
