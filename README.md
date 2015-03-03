@@ -1,8 +1,9 @@
 Part Name - IMA Part-123 Not a Part345 Breakout
 ========================================
 
-[![Part Name](URL for picture of part)
-*Part Name (SKU)*](URL for product on Sparkfun.com)
+![Part Name](URL for picture of part)
+
+[*Part Name (SKU)*](URL for product on Sparkfun.com)
 
 Basic description of the part [The datasheet can be found here.](http://dlnmh9ip6v2uc.cloudfront.net/datasheets/Sensors/IMU/PS-MPU-9150A.pdf)
 
@@ -44,4 +45,4 @@ The code is beerware; if you see me (or any other SparkFun employee) at the loca
 
 Distributed as-is; no warranty is given.
 
-->Any collaboration credit should appear here.<-
+_Any collaboration credit should appear here._
