@@ -7,10 +7,8 @@ Part Name - IMA Part-123 Not a Part345 Breakout
 
 Basic description of the part [The datasheet can be found here.](http://dlnmh9ip6v2uc.cloudfront.net/datasheets/Sensors/IMU/PS-MPU-9150A.pdf)
 
-More information can be found on the Wiki for this repo. 
 
 This part was created in Eagle vXXX, this firmware was created in Arduino vBlahBlahBlah, etc. 
-
 
 
 
@@ -19,13 +17,14 @@ Repository Contents
 
 * **/Enclosure** - 3D model of an enclosure designed for this particular part
 * **/Firmware** - Any firmware that the part ships with, 
-* **/Hardware** - All Eagle design files (.brd, .sch, .STL)
+* **/Hardware** - All Eagle design files (.brd, .sch)
 * **/Libraries** - All Arduino libraries and board examples
 * **/Production** - Test bed files and production panel files
 * **/Software** - Any desktop based software used to work with this project.
-* **[Wiki](URL for GitHub Wiki) - Wiki with examples or helpful information for product
+* **[Hookup guide](Learn.SparkFun URL) - Hookup guide with examples or helpful information for product
 
 Please note: Fritzing parts live on the [SparkFun Fritzing repo](https://github.com/sparkfun/Fritzing_Parts)
+Also, 3D Models of parts live in the [SparkFun 3D Model repo](https://github.com/sparkfun/3D_Models). 
 
 Product Versions
 ----------------

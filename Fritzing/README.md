@@ -1,2 +1,0 @@
-* Fritzing diagram showing the OpenLog connected to an [FTDI board](https://www.sparkfun.com/products/9716).
-* The subfolder contains the source files for Fritzing diagrams for the Lilytwinkle and Lilytiny.
