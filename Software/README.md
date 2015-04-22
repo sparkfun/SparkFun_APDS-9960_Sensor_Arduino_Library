@@ -1,1 +1,0 @@
-The software file includes a Python script for using hardware SPI. 
