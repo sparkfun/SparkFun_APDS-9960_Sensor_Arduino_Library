@@ -1,11 +1,39 @@
-SparkFun <PRODUCT NAME> Arduino Library
+SparkFun_APDS9960 RGB and Gesture Sensor Arduino Library
 ========================================
 
-![SparkFun Part Name](URL for picture of part)
+![Avago APDS-9960 Breakout Board - SEN-12787 ](https://cdn.sparkfun.com/r/92-92/assets/parts/9/6/0/3/12787-01.jpg)
 
-[*SparkFun Part Name (SKU)*](URL for product on Sparkfun.com)
+[*Avago APDS-9960 Breakout Board (SEN-12787)*](https://www.sparkfun.com/products/12787)
 
-<Basic description of the library.>
+Getting Started
+---------------
+
+* Download the Git repository as a ZIP ("Download ZIP" button)
+* Unzip
+* Copy the entire library directory (APDS-9960_RGB_and_Gesture_Sensor_Arduino_Library
+) to \<Arduino installation directory\>/libraries
+* Open the Arduino program
+* Select File -> Examples -> SparkFun_APDS9960 -> GestureTest
+* Plug in your Arduino and APDS-9960 with the following connections
+
+*-OR-*
+
+* Use the library manager
+
+| Arduino Pin | APDS-9960 Board | Function |
+|---|---|---| 
+| 3.3V | VCC | Power |
+| GND | GND | Ground |
+| A4 | SDA | I2C Data |
+| A5 | SCL | I2C Clock |
+| 2 | INT | Interrupt |
+
+* Go to Tools -> Board and select your Arduino board
+* Go to Tools -> Serial Port and select the COM port of your Arduino board
+* Click "Upload"
+* Go to Tools -> Serial Monitor
+* Ensure the baud rate is set at 9600 baud
+* Swipe your hand over the sensor in various directions!
 
 Repository Contents
 -------------------
@@ -20,21 +48,26 @@ Documentation
 --------------
 
 * **[Installing an Arduino Library Guide](https://learn.sparkfun.com/tutorials/installing-an-arduino-library)** - Basic information on how to install an Arduino library.
-* **[Product Repository](GitHub Product URL)** - Main repository (including hardware files) for the <PRODUCT NAME>.
-* **[Hookup Guide](Learn.SparkFun URL)** - Basic hookup guide for the <PRODUCT NAME>.
+* **[Product Repository](https://github.com/sparkfun/APDS-9960_RGB_and_Gesture_Sensor)** - Main repository (including hardware files) for the SparkFun_APDS9960 RGB and Gesture Sensor.
+* **[Quickstart Guide](https://learn.sparkfun.com/tutorials/bmp180-barometric-pressure-sensor-hookup-)** - Basic hookup guide for the sensor.
 
 Products that use this Library 
 ---------------------------------
 
-* [Part SKU](SparkFun part URL)- Basic part and short description here
-* [Part SKU](SparkFun part URL)- Basic part and short description here
+* [SEN-12787](https://www.sparkfun.com/products/12787)- Avago APDS-9960 
 
 Version History
 ---------------
-
-* [vExxFxxZxxHxxLxxSxx](URL for tag specific to this version) - Description 
-* [vEyyFyyZyyHyyLyySyy](URL for tag specific to this version) - Description
-
+* [V_1.4.0](https://github.com/sparkfun/APDS-9960_RGB_and_Gesture_Sensor_Arduino_Library/tree/V_1.4.0) - Updated to new library structure
+* V_1.3.0 - Implemented disableProximitySensor(). Thanks to jmg5150 for catching that!
+* V_1.2.0 - Added pinMode line to GestureTest demo to fix interrupt bug with some Arduinos
+* V_1.1.0 - Updated GestureTest demo to not freeze with fast swipes
+* V_1.0.0: Initial release
+-- Ambient and RGB light sensing implemented
+-- Ambient light interrupts working
+-- Proximity sensing implemented
+-- Proximity interrupts working
+-- Gesture (UP, DOWN, LEFT, RIGHT, NEAR, FAR) sensing implemented
 License Information
 -------------------
 
@@ -49,3 +82,4 @@ Distributed as-is; no warranty is given.
 - Your friends at SparkFun.
 
 _<COLLABORATION CREDIT>_
+
