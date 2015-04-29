@@ -63,11 +63,11 @@ Version History
 * V_1.2.0 - Added pinMode line to GestureTest demo to fix interrupt bug with some Arduinos
 * V_1.1.0 - Updated GestureTest demo to not freeze with fast swipes
 * V_1.0.0: Initial release
--- Ambient and RGB light sensing implemented
--- Ambient light interrupts working
--- Proximity sensing implemented
--- Proximity interrupts working
--- Gesture (UP, DOWN, LEFT, RIGHT, NEAR, FAR) sensing implemented
+*\- Ambient and RGB light sensing implemented
+*\- Ambient light interrupts working
+*\- Proximity sensing implemented
+*\- Proximity interrupts working
+*\- Gesture (UP, DOWN, LEFT, RIGHT, NEAR, FAR) sensing implemented
 License Information
 -------------------
 
@@ -80,6 +80,3 @@ Please use, reuse, and modify these files as you see fit. Please maintain attrib
 Distributed as-is; no warranty is given.
 
 - Your friends at SparkFun.
-
-_<COLLABORATION CREDIT>_
-
