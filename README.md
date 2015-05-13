@@ -56,6 +56,7 @@ Products that use this Library
 
 Version History
 ---------------
+* [V_1.4.1](https://github.com/sparkfun/SparkFun_APDS-9960_Sensor_Arduino_Library/tree/V_1.4.1) - Removing blank files, updating library.properties file. 
 * [V_1.4.0](https://github.com/sparkfun/APDS-9960_RGB_and_Gesture_Sensor_Arduino_Library/tree/V_1.4.0) - Updated to new library structure
 * V_1.3.0 - Implemented disableProximitySensor(). Thanks to jmg5150 for catching that!
 * V_1.2.0 - Added pinMode line to GestureTest demo to fix interrupt bug with some Arduinos
