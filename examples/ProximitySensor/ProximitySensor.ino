@@ -13,12 +13,12 @@ Hardware Connections:
 
 IMPORTANT: The APDS-9960 can only accept 3.3V!
  
- Arduino Pin  APDS-9960 Board  Function
+ Wemos Pin  APDS-9960 Board  Function
  
  3.3V         VCC              Power
  GND          GND              Ground
- A4           SDA              I2C Data
- A5           SCL              I2C Clock
+ D3           SDA              I2C Data
+ D1           SCL              I2C Clock
 
 Resources:
 Include Wire.h and SparkFun_APDS-9960.h
@@ -32,19 +32,28 @@ employee) at the local, and you've found our code helpful, please
 buy us a round!
 
 Distributed as-is; no warranty is given.
+
+Modified for ESP8266 by Jon Ulmer Nov 2016
 ****************************************************************/
 
 #include <Wire.h>
 #include <SparkFun_APDS9960.h>
+
+// Pins on wemos D1 mini
+#define APDS9960_SDA    D3  //AKA GPIO0
+#define APDS9960_SCL    D1  //AKA GPIO5
 
 // Global Variables
 SparkFun_APDS9960 apds = SparkFun_APDS9960();
 uint8_t proximity_data = 0;
 
 void setup() {
+
+  //Start I2C with pins defined above
+  Wire.begin(APDS9960_SDA,APDS9960_SCL);
   
   // Initialize Serial port
-  Serial.begin(9600);
+  Serial.begin(115200);
   Serial.println();
   Serial.println(F("------------------------------------"));
   Serial.println(F("SparkFun APDS-9960 - ProximitySensor"));
