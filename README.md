@@ -5,6 +5,12 @@ SparkFun APDS9960 RGB and Gesture Sensor Arduino Library
 
 [*Avago APDS-9960 Breakout Board (SEN-12787)*](https://www.sparkfun.com/products/12787)
 
+20 February 2017 - LIBRARY MODIFIED BY MARCFINNS AS FOLLOWS:
+
+In the original version the readGesture() API does not return until there is something in front of the sensor. This blocks the execution flow indefinitely if the sensor view is not clear, e.g.if an object is in front of the sensor. This is a big issue for small CPUs such as Arduino / ESP8266 that are not multithreaded.
+The issue is addressed by adding a setGestureTimeout() API that accepts a timeout in milliseconds. If the readGesture() API returns because of a timeout, the returned event is set to DIR_NONE.
+The original blocking behavior is retained as the default timeout value is set to DEFAULT_GWAIT_FOREVER upon initialization. 
+
 Getting Started
 ---------------
 
