@@ -1,16 +1,16 @@
 /**
- * @file    SparkFun_APDS-9960.h
- * @brief   Library for the SparkFun APDS-9960 breakout board
- * @author  Shawn Hymel (SparkFun Electronics)
- *
- * @copyright	This code is public domain but you buy me a beer if you use
- * this and we meet someday (Beerware license).
- *
- * This library interfaces the Avago APDS-9960 to Arduino over I2C. The library
- * relies on the Arduino Wire (I2C) library. to use the library, instantiate an
- * APDS9960 object, call init(), and call the appropriate functions.
- */
- 
+   @file    SparkFun_APDS-9960.h
+   @brief   Library for the SparkFun APDS-9960 breakout board
+   @author  Shawn Hymel (SparkFun Electronics)
+
+   @copyright	This code is public domain but you buy me a beer if you use
+   this and we meet someday (Beerware license).
+
+   This library interfaces the Avago APDS-9960 to Arduino over I2C. The library
+   relies on the Arduino Wire (I2C) library. to use the library, instantiate an
+   APDS9960 object, call init(), and call the appropriate functions.
+*/
+
 #ifndef SparkFun_APDS9960_H
 #define SparkFun_APDS9960_H
 
@@ -32,7 +32,7 @@
 
 /* Acceptable device IDs */
 #define APDS9960_ID_1           0xAB
-#define APDS9960_ID_2           0x9C 
+#define APDS9960_ID_2           0x9C
 
 /* Misc parameters */
 #define FIFO_PAUSE_TIME         30      // Wait period (ms) between FIFO reads
@@ -140,7 +140,7 @@
 #define LED_BOOST_100           0
 #define LED_BOOST_150           1
 #define LED_BOOST_200           2
-#define LED_BOOST_300           3    
+#define LED_BOOST_300           3
 
 /* Gesture wait time values */
 #define GWTIME_0MS              0
@@ -154,7 +154,7 @@
 
 /* Default values */
 #define DEFAULT_ATIME           219     // 103ms
-#define DEFAULT_WTIME           246     // 27ms
+#define DEFAULT_WTIME           246     // 27ms  // was 246
 #define DEFAULT_PROX_PPULSE     0x87    // 16us, 8 pulses
 #define DEFAULT_GESTURE_PPULSE  0x89    // 16us, 10 pulses
 #define DEFAULT_POFFSET_UR      0       // 0 offset
@@ -181,6 +181,9 @@
 #define DEFAULT_GCONF3          0       // All photodiodes active during gesture
 #define DEFAULT_GIEN            0       // Disable gesture interrupts
 
+// MarcFinns
+#define DEFAULT_GWAIT_FOREVER   -1      // No timeout on waiting for gesture
+
 /* Direction definitions */
 enum {
   DIR_NONE,
@@ -193,6 +196,7 @@ enum {
   DIR_ALL
 };
 
+
 /* State definitions */
 enum {
   NA_STATE,
@@ -203,19 +207,19 @@ enum {
 
 /* Container for gesture data */
 typedef struct gesture_data_type {
-    uint8_t u_data[32];
-    uint8_t d_data[32];
-    uint8_t l_data[32];
-    uint8_t r_data[32];
-    uint8_t index;
-    uint8_t total_gestures;
-    uint8_t in_threshold;
-    uint8_t out_threshold;
+  uint8_t u_data[32];
+  uint8_t d_data[32];
+  uint8_t l_data[32];
+  uint8_t r_data[32];
+  uint8_t index;
+  uint8_t total_gestures;
+  uint8_t in_threshold;
+  uint8_t out_threshold;
 } gesture_data_type;
 
 /* APDS9960 Class */
 class SparkFun_APDS9960 {
-public:
+  public:
 
     /* Initialization methods */
     SparkFun_APDS9960();
@@ -223,11 +227,11 @@ public:
     bool init();
     uint8_t getMode();
     bool setMode(uint8_t mode, uint8_t enable);
-    
+
     /* Turn the APDS-9960 on and off */
     bool enablePower();
     bool disablePower();
-    
+
     /* Enable or disable specific sensors */
     bool enableLightSensor(bool interrupts = false);
     bool disableLightSensor();
@@ -235,13 +239,13 @@ public:
     bool disableProximitySensor();
     bool enableGestureSensor(bool interrupts = true);
     bool disableGestureSensor();
-    
+
     /* LED drive strength control */
     uint8_t getLEDDrive();
     bool setLEDDrive(uint8_t drive);
     uint8_t getGestureLEDDrive();
     bool setGestureLEDDrive(uint8_t drive);
-    
+
     /* Gain control */
     uint8_t getAmbientLightGain();
     bool setAmbientLightGain(uint8_t gain);
@@ -249,19 +253,19 @@ public:
     bool setProximityGain(uint8_t gain);
     uint8_t getGestureGain();
     bool setGestureGain(uint8_t gain);
-    
+
     /* Get and set light interrupt thresholds */
     bool getLightIntLowThreshold(uint16_t &threshold);
     bool setLightIntLowThreshold(uint16_t threshold);
     bool getLightIntHighThreshold(uint16_t &threshold);
     bool setLightIntHighThreshold(uint16_t threshold);
-    
+
     /* Get and set proximity interrupt thresholds */
     bool getProximityIntLowThreshold(uint8_t &threshold);
     bool setProximityIntLowThreshold(uint8_t threshold);
     bool getProximityIntHighThreshold(uint8_t &threshold);
     bool setProximityIntHighThreshold(uint8_t threshold);
-    
+
     /* Get and set interrupt enables */
     uint8_t getAmbientLightIntEnable();
     bool setAmbientLightIntEnable(uint8_t enable);
@@ -269,25 +273,29 @@ public:
     bool setProximityIntEnable(uint8_t enable);
     uint8_t getGestureIntEnable();
     bool setGestureIntEnable(uint8_t enable);
-    
+
     /* Clear interrupts */
     bool clearAmbientLightInt();
     bool clearProximityInt();
-    
+
     /* Ambient light methods */
     bool readAmbientLight(uint16_t &val);
     bool readRedLight(uint16_t &val);
     bool readGreenLight(uint16_t &val);
     bool readBlueLight(uint16_t &val);
-    
+
     /* Proximity methods */
     bool readProximity(uint8_t &val);
-    
+
     /* Gesture methods */
     bool isGestureAvailable();
     int readGesture();
+
+    // MarcFinns - Time the driver will wait for a gesture to complete
+    bool setGestureTimeout(uint16_t timeout);
+    uint16_t getGestureTimeout();
     
-private:
+  private:
 
     /* Gesture processing */
     void resetGestureParameters();
@@ -299,27 +307,27 @@ private:
     bool setProxIntLowThresh(uint8_t threshold);
     uint8_t getProxIntHighThresh();
     bool setProxIntHighThresh(uint8_t threshold);
-    
+
     /* LED Boost Control */
     uint8_t getLEDBoost();
     bool setLEDBoost(uint8_t boost);
-    
+
     /* Proximity photodiode select */
     uint8_t getProxGainCompEnable();
     bool setProxGainCompEnable(uint8_t enable);
     uint8_t getProxPhotoMask();
     bool setProxPhotoMask(uint8_t mask);
-    
+
     /* Gesture threshold control */
     uint8_t getGestureEnterThresh();
     bool setGestureEnterThresh(uint8_t threshold);
     uint8_t getGestureExitThresh();
     bool setGestureExitThresh(uint8_t threshold);
-    
+
     /* Gesture LED, gain, and time control */
     uint8_t getGestureWaitTime();
     bool setGestureWaitTime(uint8_t time);
-    
+
     /* Gesture mode */
     uint8_t getGestureMode();
     bool setGestureMode(uint8_t mode);
@@ -341,6 +349,9 @@ private:
     int gesture_far_count_;
     int gesture_state_;
     int gesture_motion_;
+
+    // MarcFinns
+    uint16_t gesture_timeout;
 };
 
 #endif
