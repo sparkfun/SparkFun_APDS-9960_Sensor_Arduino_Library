@@ -229,6 +229,7 @@ public:
     SparkFun_APDS9960();
     ~SparkFun_APDS9960();
     bool init();
+    uint8_t getStatusRegister();
     uint8_t getMode();
     bool setMode(uint8_t mode, uint8_t enable);
     
