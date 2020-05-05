@@ -199,6 +199,23 @@ bool SparkFun_APDS9960::init()
  ******************************************************************************/
 
 /**
+ * @brief Reads and returns the contents of the STATUS register
+ *
+ * @return Contents of the STATUS register. 0xFF if error.
+ */
+uint8_t SparkFun_APDS9960::getStatusRegister()
+{
+    uint8_t status_value;
+
+    /* Read current ENABLE register */
+    if(!wireReadDataByte(APDS9960_STATUS, status_value) ) {
+        return ERROR;
+    }
+
+    return status_value;
+}
+
+/**
  * @brief Reads and returns the contents of the ENABLE register
  *
  * @return Contents of the ENABLE register. 0xFF if error.
