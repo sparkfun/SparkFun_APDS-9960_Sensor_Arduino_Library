@@ -98,6 +98,14 @@
 #define APDS9960_GEN            0b01000000
 #define APDS9960_GVALID         0b00000001
 
+/* Status bit fields */
+#define APDS9960_AVALID         0b0000001
+#define APDS9960_PVALID         0b0000010
+#define APDS9960_GINT           0b0000100
+#define APDS9960_AINT           0b0010000
+#define APDS9960_PGSAT          0b0100000
+#define APDS9960_CPSAT          0b1000000
+
 /* On/Off definitions */
 #define OFF                     0
 #define ON                      1
@@ -221,6 +229,7 @@ public:
     SparkFun_APDS9960();
     ~SparkFun_APDS9960();
     bool init();
+    uint8_t getStatusRegister();
     uint8_t getMode();
     bool setMode(uint8_t mode, uint8_t enable);
     
