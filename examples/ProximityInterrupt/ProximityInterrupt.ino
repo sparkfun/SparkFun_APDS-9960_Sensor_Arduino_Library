@@ -14,14 +14,14 @@ Hardware Connections:
 
 IMPORTANT: The APDS-9960 can only accept 3.3V!
  
- Arduino Pin  APDS-9960 Board  Function
+Wemos Pin  APDS-9960 Board  Function
  
  3.3V         VCC              Power
  GND          GND              Ground
- A4           SDA              I2C Data
- A5           SCL              I2C Clock
- 2            INT              Interrupt
- 13           -                LED
+ D3           SDA              I2C Data
+ D1           SCL              I2C Clock
+ D6           INT              Interrupt
+ D7           -                LED
 
 Resources:
 Include Wire.h and SparkFun_APDS-9960.h
@@ -35,14 +35,18 @@ employee) at the local, and you've found our code helpful, please
 buy us a round!
 
 Distributed as-is; no warranty is given.
+
+Modified for ESP8266 by Jon Ulmer Nov 2016
 ****************************************************************/
 
 #include <Wire.h>
 #include <SparkFun_APDS9960.h>
 
-// Pins
-#define APDS9960_INT    2  // Needs to be an interrupt pin
-#define LED_PIN         13 // LED for showing interrupt
+// Pins on wemos D1 mini
+#define APDS9960_INT    D6  //AKA GPIO12 -- Interupt pin
+#define APDS9960_SDA    D3  //AKA GPIO0
+#define APDS9960_SCL    D1  //AKA GPIO5
+#define LED_PIN         D7  //AKA GPIO13 -- LED for showing interrupt
 
 // Constants
 #define PROX_INT_HIGH   50 // Proximity level for interrupt
@@ -51,23 +55,26 @@ Distributed as-is; no warranty is given.
 // Global variables
 SparkFun_APDS9960 apds = SparkFun_APDS9960();
 uint8_t proximity_data = 0;
-int isr_flag = 0;
+volatile bool isr_flag = 0;
 
 void setup() {
+
+  //Start I2C with pins defined above
+  Wire.begin(APDS9960_SDA,APDS9960_SCL);
   
   // Set LED as output
   pinMode(LED_PIN, OUTPUT);
   pinMode(APDS9960_INT, INPUT);
   
   // Initialize Serial port
-  Serial.begin(9600);
+  Serial.begin(115200);
   Serial.println();
   Serial.println(F("---------------------------------------"));
   Serial.println(F("SparkFun APDS-9960 - ProximityInterrupt"));
   Serial.println(F("---------------------------------------"));
   
   // Initialize interrupt service routine
-  attachInterrupt(0, interruptRoutine, FALLING);
+  attachInterrupt(APDS9960_INT, interruptRoutine, FALLING);
   
   // Initialize APDS-9960 (configure I2C and initial values)
   if ( apds.init() ) {
