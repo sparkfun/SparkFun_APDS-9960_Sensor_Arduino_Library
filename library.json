@@ -1,0 +1,13 @@
+{
+  "name": "SparkFun_APDS9960",
+  "keywords": "gesture, light, rgb, sensor",
+  "description": "Library for the light, RGB, and gesture sensor Avago APDS-9960",
+  "repository":
+  {
+    "type": "git",
+    "url": "https://github.com/sparkfun/SparkFun_APDS-9960_Sensor_Arduino_Library.git"
+  },
+  "version": "1.4.2",
+  "frameworks": "arduino",
+  "platforms": "*"
+}
