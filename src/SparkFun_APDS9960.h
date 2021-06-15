@@ -446,8 +446,9 @@ public:
     uint8_t fifo_level;
     uint8_t errno;
     GS_State state;
+#ifdef ESP32
     SemaphoreHandle_t xSemaphore = NULL;
-
+#endif
     // MarcFinns
     uint16_t gesture_timeout;
 };

@@ -38,7 +38,9 @@ SparkFun_APDS9960::SparkFun_APDS9960()
     gesture_state_ = 0;
     gesture_motion_ = DIR_NONE;
 
+#ifdef ESP32
     vSemaphoreCreateBinary(xSemaphore);
+#endif
 }
  
 /**
@@ -2177,7 +2179,9 @@ bool SparkFun_APDS9960::wireWriteDataBlock(  uint8_t reg,
 */
 bool SparkFun_APDS9960::wireReadDataByte(uint8_t reg, uint8_t &val) {
     bool good = false;
+#ifdef ESP32
     if (xSemaphoreTake(xSemaphore, (TickType_t)5) == pdTRUE) {
+#endif
         /* Indicate which register we want to read from */
         if (!wireWriteByte(reg)) {
             errno = GSERR_WIRE_READ;
@@ -2189,8 +2193,10 @@ bool SparkFun_APDS9960::wireReadDataByte(uint8_t reg, uint8_t &val) {
             }
             good = true;
         }
+#ifdef ESP32
         xSemaphoreGive(xSemaphore);
     }
+#endif
     return good;
 }
 
@@ -2208,7 +2214,9 @@ int SparkFun_APDS9960::wireReadDataBlock(   uint8_t reg,
 {
     unsigned char i = 0;
     bool bail = false;
+#ifdef ESP32
     if (xSemaphoreTake(xSemaphore, (TickType_t)5) == pdTRUE) {
+#endif
         /* Indicate which register we want to read from */
         if (!wireWriteByte(reg)) {
             errno = GSERR_BLOCK_READ;
@@ -2225,8 +2233,10 @@ int SparkFun_APDS9960::wireReadDataBlock(   uint8_t reg,
                 i++;
             }
         }
+#ifdef ESP32
+        xSemaphoreGive(xSemaphore);
     }
-    xSemaphoreGive(xSemaphore);
+#endif
     if (bail) {
         i = -1;
     }
