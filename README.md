@@ -1,4 +1,4 @@
-SparkFun APDS9960 RGB and Gesture Sensor Arduino Library
+SparkFun APDS9960 RGB and Gesture Sensor Arduino Library (non blocking fork)
 =========================================================
 
 ![Avago APDS-9960 Breakout Board - SEN-12787 ](https://cdn.sparkfun.com/r/92-92/assets/parts/9/6/0/3/12787-01.jpg)
