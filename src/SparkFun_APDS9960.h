@@ -11,8 +11,7 @@
  * APDS9960 object, call init(), and call the appropriate functions.
  */
  
-#ifndef SparkFun_APDS9960_H
-#define SparkFun_APDS9960_H
+#pragma once
 
 #include <Arduino.h>
 
@@ -28,7 +27,12 @@
 #define GESTURE_SENSITIVITY_2   20
 
 /* Error code for returned values */
-#define ERROR                   0xFF
+#define ERROR 0xFF
+
+#define APDS_CHECK(expr)  \
+    if (!expr) {          \
+        return DIR_ERROR; \
+    }
 
 /* Acceptable device IDs */
 #define APDS9960_ID_1           0xAB
@@ -189,25 +193,20 @@
 #define DEFAULT_GCONF3          0       // All photodiodes active during gesture
 #define DEFAULT_GIEN            0       // Disable gesture interrupts
 
+// MarcFinns
+#define DEFAULT_GWAIT_FOREVER -1  // No timeout on waiting for gesture
+
+#define GSERR_OK 0
+#define GSERR_WIRE_READ 1
+#define GSERR_WIRE_WRITE 2
+#define GSERR_BLOCK_READ 3
+
 /* Direction definitions */
-enum {
-  DIR_NONE,
-  DIR_LEFT,
-  DIR_RIGHT,
-  DIR_UP,
-  DIR_DOWN,
-  DIR_NEAR,
-  DIR_FAR,
-  DIR_ALL
-};
+enum Gesture { DIR_NONE, DIR_LEFT, DIR_RIGHT, DIR_UP, DIR_DOWN, DIR_NEAR, DIR_FAR, DIR_ALL, DIR_PENDING, DIR_ERROR = ERROR };
 
 /* State definitions */
-enum {
-  NA_STATE,
-  NEAR_STATE,
-  FAR_STATE,
-  ALL_STATE
-};
+enum { NA_STATE, NEAR_STATE, FAR_STATE, ALL_STATE };
+enum GS_State { GS_IDLE, GS_GESTURE_IN_PROGRESS, GS_GESTURE_READY };
 
 /* Container for gesture data */
 typedef struct gesture_data_type {
@@ -294,14 +293,107 @@ public:
     
     /* Gesture methods */
     bool isGestureAvailable();
-    int readGesture();
-    
-private:
+    Gesture readGesture();
 
+    // MarcFinns - Time the driver will wait for a gesture to complete
+    bool setGestureTimeout(uint16_t timeout);
+    uint16_t getGestureTimeout();
+    Gesture checkGesture() {
+        uint8_t gstatus;
+        errno = GSERR_OK;
+        switch (state) {
+            case GS_IDLE:
+                if (!isGestureAvailable() || !(getMode() & 0b01000001)) {
+                    return DIR_NONE;
+                }
+                resetGestureParameters();
+                state = GS_GESTURE_IN_PROGRESS;
+                lc = 0;
+                break;
+            case GS_GESTURE_IN_PROGRESS:
+                delay(FIFO_PAUSE_TIME);
+                wireReadDataByte(APDS9960_GSTATUS, gstatus);
+                if (errno) return DIR_ERROR;
+                if ((gstatus & APDS9960_GVALID) == APDS9960_GVALID) {
+                    processFifo();
+                    if (errno) return DIR_ERROR;
+                } else {
+                    state = GS_GESTURE_READY;
+                    delay(FIFO_PAUSE_TIME);
+                    decodeGesture();
+                    int motion = gesture_motion_;
+#if DEBUG
+                    Serial.print("END: ");
+                    Serial.println(gesture_motion_);
+#endif
+                    return (Gesture)motion;
+                }
+                break;
+            case GS_GESTURE_READY:
+                state = GS_IDLE;
+                break;
+            default:
+                state = GS_IDLE;
+                break;
+        }
+        return DIR_NONE;
+    }
+
+    GS_State getState() { return state; }
+
+   private:
     /* Gesture processing */
     void resetGestureParameters();
     bool processGestureData();
     bool decodeGesture();
+    void copyFromFifo(uint8_t bytes_read, uint8_t *fifo_data);
+    void dbg_fifoDump(uint8_t bytes_read, uint8_t *fifo_data);
+    void dbg_upDump();
+    void dbg_flDump(uint8_t lc, uint8_t fifo_level);
+
+    /**
+     * @brief Read and process the FIFO
+     *
+     * @return true no read errors
+     * @return false some read error
+     */
+    bool processFifo() { /* Read the current FIFO level */
+        uint8_t fifo_data[128];
+        fifo_level = 0;
+        uint8_t bytes_read = 0;
+
+        wireReadDataByte(APDS9960_GFLVL, fifo_level);
+
+        if (errno) return false;
+
+        dbg_flDump(lc, fifo_level);
+        /* If there's stuff in the FIFO, read it into our data block */
+        if (fifo_level > 0) {
+            bytes_read = wireReadDataBlock(APDS9960_GFIFO_U, (uint8_t *)fifo_data, (fifo_level * 4));
+            if (bytes_read == 0xFF) {
+                errno = GSERR_BLOCK_READ;
+                return false;
+            }
+            dbg_fifoDump(bytes_read, fifo_data);
+
+            /* If at least 1 set of data, sort the data into U/D/L/R */
+            if (bytes_read >= 4) {
+                copyFromFifo(bytes_read, fifo_data);
+                dbg_upDump();
+
+                /* Filter and process gesture data. Decode near/far state */
+                bool ok = processGestureData();
+                if (ok) {
+                    decodeGesture();
+                }
+
+                /* Reset data */
+                gesture_data_.index = 0;
+                gesture_data_.total_gestures = 0;
+            }
+        }
+        return true;
+    }
 
     /* Proximity Interrupt Threshold */
     uint8_t getProxIntLowThresh();
@@ -350,6 +442,12 @@ private:
     int gesture_far_count_;
     int gesture_state_;
     int gesture_motion_;
-};
+    int lc;
+    uint8_t fifo_level;
+    uint8_t errno;
+    GS_State state;
+    SemaphoreHandle_t xSemaphore = NULL;
 
-#endif
+    // MarcFinns
+    uint16_t gesture_timeout;
+};
