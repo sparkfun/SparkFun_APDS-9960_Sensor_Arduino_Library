@@ -1,9 +1,12 @@
-SparkFun APDS9960 RGB and Gesture Sensor Arduino Library
+SparkFun APDS9960 RGB and Gesture Sensor Arduino Library (non blocking fork)
 =========================================================
 
 ![Avago APDS-9960 Breakout Board - SEN-12787 ](https://cdn.sparkfun.com/r/92-92/assets/parts/9/6/0/3/12787-01.jpg)
 
 [*Avago APDS-9960 Breakout Board (SEN-12787)*](https://www.sparkfun.com/products/12787)
+
+This version has added apds.checkGesture() which, when repeatedly called, returns DIR_NONE most of the time but when a completed gesture is seen it returns that gesture. Updates were made with the ESP32 in mind, so the I2C uses a semaphore to prevent problems when e.g. calling apds.getProximity() from a different thread.
+If this isn't required, or you're using an Arduino, the semaphore code is ifdef'd out, but that's not tested.
 
 Getting Started
 ---------------

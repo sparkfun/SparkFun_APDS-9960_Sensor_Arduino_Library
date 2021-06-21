@@ -37,6 +37,10 @@ SparkFun_APDS9960::SparkFun_APDS9960()
     
     gesture_state_ = 0;
     gesture_motion_ = DIR_NONE;
+
+#ifdef ESP32
+    vSemaphoreCreateBinary(xSemaphore);
+#endif
 }
  
 /**
@@ -162,7 +166,12 @@ bool SparkFun_APDS9960::init()
     if( !setGestureIntEnable(DEFAULT_GIEN) ) {
         return false;
     }
-    
+
+    // MarcFinns -
+    if (!setGestureTimeout(DEFAULT_GWAIT_FOREVER)) {
+        return false;
+    }
+
 #if 0
     /* Gesture config register dump */
     uint8_t reg;
@@ -251,7 +260,7 @@ bool SparkFun_APDS9960::setMode(uint8_t mode, uint8_t enable)
     
     /* Change bit(s) in ENABLE register */
     enable = enable & 0x01;
-    if( mode >= 0 && mode <= 6 ) {
+    if (mode <= 6) {
         if (enable) {
             reg_val |= (1 << mode);
         } else {
@@ -473,108 +482,83 @@ bool SparkFun_APDS9960::isGestureAvailable()
     }
 }
 
+void SparkFun_APDS9960::copyFromFifo(uint8_t bytes_read, uint8_t *fifo_data) {
+    for (uint8_t i = 0; i < bytes_read; i += 4) {
+        gesture_data_.u_data[gesture_data_.index] = fifo_data[i + 0];
+        gesture_data_.d_data[gesture_data_.index] = fifo_data[i + 1];
+        gesture_data_.l_data[gesture_data_.index] = fifo_data[i + 2];
+        gesture_data_.r_data[gesture_data_.index] = fifo_data[i + 3];
+        gesture_data_.index++;
+        gesture_data_.total_gestures++;
+    }
+}
+
+void SparkFun_APDS9960::dbg_fifoDump(uint8_t bytes_read, uint8_t *fifo_data) {
+#if DEBUG
+    Serial.print("FIFO Dump: ");
+    for (uint8_t i = 0; i < bytes_read; i++) {
+        Serial.print(fifo_data[i]);
+        Serial.print(" ");
+    }
+    Serial.println();
+#endif
+}
+void SparkFun_APDS9960::dbg_upDump() {
+#if DEBUG
+    Serial.print("Up Data: ");
+    for (uint8_t i = 0; i < gesture_data_.total_gestures; i++) {
+        Serial.print(gesture_data_.u_data[i]);
+        Serial.print(" ");
+    }
+    Serial.println();
+#endif
+}
+
+void SparkFun_APDS9960::dbg_flDump(uint8_t lc, uint8_t fifo_level) {
+#if DEBUG
+    Serial.print(":");
+    Serial.print(lc);
+    Serial.print(": FIFO Level: ");
+    Serial.println(fifo_level);
+#endif
+}
+
 /**
- * @brief Processes a gesture event and returns best guessed gesture
- *
- * @return Number corresponding to gesture. -1 on error.
- */
-int SparkFun_APDS9960::readGesture()
-{
-    uint8_t fifo_level = 0;
-    uint8_t bytes_read = 0;
-    uint8_t fifo_data[128];
+   @brief Processes a gesture event and returns best guessed gesture
+
+   @return Number corresponding to gesture. -1 on error.
+*/
+Gesture SparkFun_APDS9960::readGesture() {
     uint8_t gstatus;
     int motion;
-    int i;
-    
+    errno = GSERR_OK;
+    state = GS_IDLE;
     /* Make sure that power and gesture is on and data is valid */
-    if( !isGestureAvailable() || !(getMode() & 0b01000001) ) {
+    if (!isGestureAvailable() || !(getMode() & 0b01000001)) {
         return DIR_NONE;
     }
-    
+
+    state = GS_GESTURE_IN_PROGRESS;
     /* Keep looping as long as gesture data is valid */
-    while(1) {
-    
+    // MarcFinns - keep looping only for some time, until timeout
+    long startTime = millis();
+    lc = 0;
+    while ((state == GS_GESTURE_IN_PROGRESS) && ((gesture_timeout == DEFAULT_GWAIT_FOREVER) || (millis() - startTime < gesture_timeout))) {
+        lc++;
         /* Wait some time to collect next batch of FIFO data */
         delay(FIFO_PAUSE_TIME);
-        
+
         /* Get the contents of the STATUS register. Is data still valid? */
-        if( !wireReadDataByte(APDS9960_GSTATUS, gstatus) ) {
-            return ERROR;
-        }
-        
+        wireReadDataByte(APDS9960_GSTATUS, gstatus);
+        if (errno) return DIR_ERROR;
+
         /* If we have valid data, read in FIFO */
-        if( (gstatus & APDS9960_GVALID) == APDS9960_GVALID ) {
-        
-            /* Read the current FIFO level */
-            if( !wireReadDataByte(APDS9960_GFLVL, fifo_level) ) {
-                return ERROR;
-            }
-
-#if DEBUG
-            Serial.print("FIFO Level: ");
-            Serial.println(fifo_level);
-#endif
-
-            /* If there's stuff in the FIFO, read it into our data block */
-            if( fifo_level > 0) {
-                bytes_read = wireReadDataBlock(  APDS9960_GFIFO_U, 
-                                                (uint8_t*)fifo_data, 
-                                                (fifo_level * 4) );
-                if( bytes_read == -1 ) {
-                    return ERROR;
-                }
-#if DEBUG
-                Serial.print("FIFO Dump: ");
-                for ( i = 0; i < bytes_read; i++ ) {
-                    Serial.print(fifo_data[i]);
-                    Serial.print(" ");
-                }
-                Serial.println();
-#endif
-
-                /* If at least 1 set of data, sort the data into U/D/L/R */
-                if( bytes_read >= 4 ) {
-                    for( i = 0; i < bytes_read; i += 4 ) {
-                        gesture_data_.u_data[gesture_data_.index] = \
-                                                            fifo_data[i + 0];
-                        gesture_data_.d_data[gesture_data_.index] = \
-                                                            fifo_data[i + 1];
-                        gesture_data_.l_data[gesture_data_.index] = \
-                                                            fifo_data[i + 2];
-                        gesture_data_.r_data[gesture_data_.index] = \
-                                                            fifo_data[i + 3];
-                        gesture_data_.index++;
-                        gesture_data_.total_gestures++;
-                    }
-                    
-#if DEBUG
-                Serial.print("Up Data: ");
-                for ( i = 0; i < gesture_data_.total_gestures; i++ ) {
-                    Serial.print(gesture_data_.u_data[i]);
-                    Serial.print(" ");
-                }
-                Serial.println();
-#endif
-
-                    /* Filter and process gesture data. Decode near/far state */
-                    if( processGestureData() ) {
-                        if( decodeGesture() ) {
-                            //***TODO: U-Turn Gestures
-#if DEBUG
-                            //Serial.println(gesture_motion_);
-#endif
-                        }
-                    }
-                    
-                    /* Reset data */
-                    gesture_data_.index = 0;
-                    gesture_data_.total_gestures = 0;
-                }
-            }
+        if ((gstatus & APDS9960_GVALID) == APDS9960_GVALID) {
+            processFifo();
+            if (errno) return DIR_ERROR;
         } else {
-    
             /* Determine best guessed gesture and clean up */
+            state = GS_GESTURE_READY;
             delay(FIFO_PAUSE_TIME);
             decodeGesture();
             motion = gesture_motion_;
@@ -583,9 +567,12 @@ int SparkFun_APDS9960::readGesture()
             Serial.println(gesture_motion_);
 #endif
             resetGestureParameters();
-            return motion;
+            return (Gesture)motion;
         }
     }
+    // MarcFinns - if exiting because of timeout, cleanup and return with no gesture
+    resetGestureParameters();
+    return DIR_NONE;
 }
 
 /**
@@ -2108,6 +2095,15 @@ bool SparkFun_APDS9960::setGestureMode(uint8_t mode)
     return true;
 }
 
+// MarcFinns - Set the time the driver will wait for a gesture to complete
+bool SparkFun_APDS9960::setGestureTimeout(uint16_t timeout) {
+    gesture_timeout = timeout;
+    return true;
+}
+
+// MarcFinns - Reads the time the driver will wait for a gesture to complete
+uint16_t SparkFun_APDS9960::getGestureTimeout() { return gesture_timeout; }
+
 /*******************************************************************************
  * Raw I2C Reads and Writes
  ******************************************************************************/
@@ -2175,27 +2171,33 @@ bool SparkFun_APDS9960::wireWriteDataBlock(  uint8_t reg,
 }
 
 /**
- * @brief Reads a single byte from the I2C device and specified register
- *
- * @param[in] reg the register to read from
- * @param[out] the value returned from the register
- * @return True if successful read operation. False otherwise.
- */
-bool SparkFun_APDS9960::wireReadDataByte(uint8_t reg, uint8_t &val)
-{
-    
-    /* Indicate which register we want to read from */
-    if (!wireWriteByte(reg)) {
-        return false;
-    }
-    
-    /* Read from register */
-    Wire.requestFrom(APDS9960_I2C_ADDR, 1);
-    while (Wire.available()) {
-        val = Wire.read();
-    }
+   @brief Reads a single byte from the I2C device and specified register
 
-    return true;
+   @param[in] reg the register to read from
+   @param[out] the value returned from the register
+   @return True if successful read operation. False otherwise.
+*/
+bool SparkFun_APDS9960::wireReadDataByte(uint8_t reg, uint8_t &val) {
+    bool good = false;
+#ifdef ESP32
+    if (xSemaphoreTake(xSemaphore, (TickType_t)5) == pdTRUE) {
+#endif
+        /* Indicate which register we want to read from */
+        if (!wireWriteByte(reg)) {
+            errno = GSERR_WIRE_READ;
+        } else {
+            /* Read from register */
+            Wire.requestFrom(APDS9960_I2C_ADDR, 1);
+            while (Wire.available()) {
+                val = Wire.read();
+            }
+            good = true;
+        }
+#ifdef ESP32
+        xSemaphoreGive(xSemaphore);
+    }
+#endif
+    return good;
 }
 
 /**
@@ -2211,21 +2213,32 @@ int SparkFun_APDS9960::wireReadDataBlock(   uint8_t reg,
                                         unsigned int len)
 {
     unsigned char i = 0;
-    
-    /* Indicate which register we want to read from */
-    if (!wireWriteByte(reg)) {
-        return -1;
-    }
-    
-    /* Read block data */
-    Wire.requestFrom(APDS9960_I2C_ADDR, len);
-    while (Wire.available()) {
-        if (i >= len) {
-            return -1;
+    bool bail = false;
+#ifdef ESP32
+    if (xSemaphoreTake(xSemaphore, (TickType_t)5) == pdTRUE) {
+#endif
+        /* Indicate which register we want to read from */
+        if (!wireWriteByte(reg)) {
+            errno = GSERR_BLOCK_READ;
+            bail = true;
+        } else {
+            /* Read block data */
+            Wire.requestFrom(APDS9960_I2C_ADDR, len);
+            while (!bail && Wire.available()) {
+                if (i >= len) {
+                    errno = GSERR_BLOCK_READ;
+                    bail = true;
+                }
+                val[i] = Wire.read();
+                i++;
+            }
         }
-        val[i] = Wire.read();
-        i++;
+#ifdef ESP32
+        xSemaphoreGive(xSemaphore);
     }
-
+#endif
+    if (bail) {
+        i = -1;
+    }
     return i;
 }
