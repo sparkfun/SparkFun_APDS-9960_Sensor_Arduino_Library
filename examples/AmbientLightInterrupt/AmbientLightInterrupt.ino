@@ -73,7 +73,7 @@ void setup() {
   Serial.println(F("-------------------------------------"));
   
   // Initialize interrupt service routine
-  attachInterrupt(0, interruptRoutine, FALLING);
+  attachInterrupt(APDS9960_INT, interruptRoutine, FALLING);
   
   // Initialize APDS-9960 (configure I2C and initial values)
   if ( apds.init() ) {
