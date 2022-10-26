@@ -70,7 +70,7 @@ void setup() {
   Serial.println(F("--------------------------------"));
   
   // Initialize interrupt service routine
-  attachInterrupt(0, interruptRoutine, FALLING);
+  attachInterrupt(APDS9960_INT, interruptRoutine, FALLING);
 
   // Initialize APDS-9960 (configure I2C and initial values)
   if ( apds.init() ) {
@@ -89,10 +89,10 @@ void setup() {
 
 void loop() {
   if( isr_flag == 1 ) {
-    detachInterrupt(0);
+    detachInterrupt(APDS9960_INT);
     handleGesture();
     isr_flag = 0;
-    attachInterrupt(0, interruptRoutine, FALLING);
+    attachInterrupt(APDS9960_INT, interruptRoutine, FALLING);
   }
 }
 
