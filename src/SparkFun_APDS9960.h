@@ -33,6 +33,7 @@
 /* Acceptable device IDs */
 #define APDS9960_ID_1           0xAB
 #define APDS9960_ID_2           0x9C 
+#define APDS9960_ID_3           0xA8 // cheap chinese clone of APDS9660 -> Can only handle gains with factor 1x!
 
 /* Misc parameters */
 #define FIFO_PAUSE_TIME         30      // Wait period (ms) between FIFO reads
